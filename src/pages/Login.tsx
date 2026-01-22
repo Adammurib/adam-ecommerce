@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // FOR LOADER
-  const [message, setMessage] = useState(''); // FOR NOTIFICATION
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -13,14 +13,17 @@ const Login = () => {
     setIsLoading(true);
     setMessage('');
 
-    // Simulate an API calling delay (Best Practice)
+    console.log("Attempting login with:", { email, password });
+
     setTimeout(() => {
       localStorage.setItem('token', 'fake-jwt-token');
+      localStorage.setItem('userEmail', email); 
+
       setIsLoading(false);
-      setMessage('Login successful! Redirecting...'); // Notification text
+      setMessage(`Success! Welcome back, ${email}.`); 
       
-      // Delay navigation slightly so user sees the success message
-      setTimeout(() => navigate('/'), 1000);
+      // FIX: Redirect to /products instead of /
+      setTimeout(() => navigate('/products'), 1000);
     }, 1500); 
   };
 
@@ -29,12 +32,12 @@ const Login = () => {
       <form onSubmit={handleLogin} style={formStyle}>
         <h2>Login</h2>
         
-        {/* NOTIFICATION SECTION */}
         {message && <div style={notificationStyle}>{message}</div>}
 
         <input 
           type="email" 
           placeholder="Email" 
+          value={email}
           onChange={(e) => setEmail(e.target.value)} 
           required 
           style={inputStyle} 
@@ -42,12 +45,12 @@ const Login = () => {
         <input 
           type="password" 
           placeholder="Password" 
+          value={password}
           onChange={(e) => setPassword(e.target.value)} 
           required 
           style={inputStyle} 
         />
 
-        {/* LOADER SPINNER LOGIC */}
         <button type="submit" style={loginButtonStyle} disabled={isLoading}>
           {isLoading ? <span className="spinner-small"></span> : 'Sign In'}
         </button>
@@ -56,7 +59,6 @@ const Login = () => {
   );
 };
 
-// --- STYLES ---
 const loginContainer = { display: 'flex', justifyContent: 'center', marginTop: '100px' };
 const formStyle = { 
   display: 'flex', 
