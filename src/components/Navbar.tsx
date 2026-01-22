@@ -10,16 +10,22 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login');
+    localStorage.removeItem('userEmail'); // Matches your Login.tsx key
+    navigate('/'); // Navigate to root (Login page)
   };
 
   return (
     <nav style={navStyle}>
-      <Link to="/" style={logoStyle}>My Store</Link>
+      {/* FIX: Redirect Logo to /products if logged in, otherwise to login page */}
+      <Link to={isAuthenticated ? "/products" : "/"} style={logoStyle}>
+        My Store
+      </Link>
       
       <div style={linkContainer}>
-        <Link to="/" style={linkStyle}>Home</Link>
+        {/* FIX: Link to /products instead of / */}
+        {isAuthenticated && (
+          <Link to="/products" style={linkStyle}>Home</Link>
+        )}
         
         {/* Only show Cart if logged in */}
         {isAuthenticated && (
@@ -32,14 +38,14 @@ const Navbar = () => {
         {isAuthenticated ? (
           <button onClick={handleLogout} style={logoutButtonStyle}>Logout</button>
         ) : (
-          <Link to="/login" style={linkStyle}>Login</Link>
+          <Link to="/" style={linkStyle}>Login</Link>
         )}
       </div>
     </nav>
   );
 };
 
-// --- STYLES ---
+// --- STYLES (No changes needed here) ---
 const navStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
@@ -61,4 +67,4 @@ const logoutButtonStyle = {
   cursor: 'pointer' 
 };
 
-export default Navbar; // This fixes the "No Default Export" error!
+export default Navbar;
