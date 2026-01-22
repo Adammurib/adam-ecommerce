@@ -1,0 +1,51 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #213547;
+  background-color: #ffffff;
+}
+
+/* FIX: Remove the flex center from body so the Navbar can sit at the top */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}
+
+/* --- LOADER SPINNER (Required by your Doctor) --- */
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* General Button Styles */
+button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+}
+
+/* Ensure images don't break layout */
+img {
+  max-width: 100%;
+}
