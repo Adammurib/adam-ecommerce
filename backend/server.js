@@ -72,3 +72,24 @@ const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+// C. Update Password (The "U" in CRUD)
+app.put('/api/user/update', (req, res) => {
+    const { email, newPassword } = req.body;
+    const sql = "UPDATE users SET password = ? WHERE email = ?";
+    
+    db.query(sql, [newPassword, email], (err, result) => {
+        if (err) return res.status(500).json({ success: false, error: err.message });
+        res.json({ success: true, message: "Password updated!" });
+    });
+});
+
+// D. Delete Account (The "D" in CRUD)
+app.delete('/api/user/delete', (req, res) => {
+    const { email } = req.body;
+    const sql = "DELETE FROM users WHERE email = ?";
+    
+    db.query(sql, [email], (err, result) => {
+        if (err) return res.status(500).json({ success: false, error: err.message });
+        res.json({ success: true, message: "Account deleted successfully!" });
+    });
+});
