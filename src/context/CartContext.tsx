@@ -10,6 +10,7 @@ interface CartItem extends Product {
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product) => void;
+  removeFromCart: (productId: number) => void; // ADDED THIS
   totalItems: number;
 }
 
@@ -33,11 +34,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  // NEW: Function to remove an item entirely from the cart
+  const removeFromCart = (productId: number) => {
+    setCart((prev) => prev.filter((item) => item.id !== productId));
+  };
+
   // Helper to count total items for the Navbar badge
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, totalItems }}>
+    // ADDED removeFromCart to the value provider below
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, totalItems }}>
       {children}
     </CartContext.Provider>
   );
