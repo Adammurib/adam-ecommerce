@@ -10,14 +10,14 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json()); // Allows us to read JSON sent from the frontend
+app.use(express.json()); // Crucial: allows app to read the email/password you send
 
 // 1. Database Connection (XAMPP MySQL)
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root',      // Default XAMPP username
-    password: '',      // Default XAMPP password is empty
-    database: 'adam_ecommerce' // We will create this in XAMPP next
+    user: 'root',      // Default XAMPP
+    password: '',      // Default XAMPP is empty
+    database: 'adam_ecommerce' 
 });
 
 db.connect((err) => {
@@ -28,9 +28,43 @@ db.connect((err) => {
     console.log('✅ Connected to XAMPP MySQL database');
 });
 
-// 2. Simple Route to test the server
+// 2. Test Route
 app.get('/', (req, res) => {
     res.send('Backend Server is Running!');
+});
+
+// --- NEW ROUTES FOR CRUD ---
+
+// A. Login API (The "Read" part of CRUD)
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+    const sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+    
+    db.query(sql, [email, password], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        
+        if (results.length > 0) {
+            res.json({ success: true, message: "Login successful", user: results[0] });
+        } else {
+            res.status(401).json({ success: false, message: "Invalid credentials" });
+        }
+    });
+});
+
+// B. Register API (The "Create" part of CRUD)
+app.post('/api/register', (req, res) => {
+    const { email, password } = req.body;
+    const sql = "INSERT INTO users (email, password) VALUES (?, ?)";
+    
+    db.query(sql, [email, password], (err, result) => {
+        if (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.status(400).json({ success: false, message: "Email already exists!" });
+            }
+            return res.status(500).json({ success: false, error: err.message });
+        }
+        res.json({ success: true, message: "Account created successfully!" });
+    });
 });
 
 // 3. Start Server
