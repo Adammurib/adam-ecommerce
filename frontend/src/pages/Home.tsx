@@ -39,7 +39,7 @@ const Home = () => {
   const handleUpdatePassword = async () => {
     if (!newPassword) return alert("Please enter a new password");
     
-    const response = await fetch('http://localhost:5000/api/user/update', {
+    const response = await fetch('http://localhost:5000/api/auth/update', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: userEmail, newPassword }),
@@ -54,7 +54,7 @@ const Home = () => {
   // 2. DELETE (D)
   const handleDeleteAccount = async () => {
     if (window.confirm("WARNING: Are you sure? This will permanently delete your account.")) {
-      const response = await fetch('http://localhost:5000/api/user/delete', {
+      const response = await fetch('http://localhost:5000/api/auth/delete', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: userEmail }),

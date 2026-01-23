@@ -67,7 +67,15 @@ const Login = () => {
         </button>
       </form>
       
-      {message && <p style={{ color: data?.success ? 'green' : 'red', marginTop: '1rem' }}>{message}</p>}
+      {message && (
+  <p style={{ 
+    color: message.includes('Success') ? 'green' : 'red', 
+    marginTop: '1rem' 
+  }}>
+    {message}
+  </p>
+)}
+      
       
       <p style={{ marginTop: '1rem' }}>
         Don't have an account? <Link to="/register">Register here</Link>
